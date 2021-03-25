@@ -3,32 +3,244 @@
 #include <stdio.h>
 #include <fstream>
 #include <string>
-
+#include <cmath>
 
 using namespace std;
 
-struct nilai
-{
-	string nis, nama;
-	int mtk, bindo, sda, akppl;
-	int jmlsiswa;
-	nilai *next;
-} *baru, *awal=NULL, *akhir=NULL, *hapus, *bantu; // deklarasi linkedlist
+//struct
+struct node{
+    char nim[10], nama[20];
+    int mtk, indo, sda, akppl, jumlah, rata;
+    
+    node *next, *prev;
+};
+    node *awal = NULL, *akhir = NULL, *bantu, *baru, *hapus;
 
 char tes;
 int pil;
 
+//penjabran void yang ada
 void pilih();
-void databaru();
-void after();
-void last();
-void haafter();
-void halast();
+void datadepan();
+void databelakang();
+void dataafter();
+void hadepan();
+void habelakang();
+void haal();
 void view();
-bool kosong();
-void bersih();
+void laporan();
 
-//untuk input data baru 
+
+void bersih (){
+    system ("cls");
+}
+
+bool isEmpty(){
+    if(awal == NULL){
+        return true; // datanya masih kosong
+    }else{
+        return false; // datanya udah ada
+    }
+}
+
+//input depan
+void datadepan(){
+    baru = new node;
+    baru -> next = NULL;
+    baru -> prev = NULL;
+    cout << "===============================\n";
+ 	cout << "        Masukan Data \n";
+ 	cout << "===============================\n";
+    cout << "Input Nama : "; cin  >> baru -> nama;
+    cout << "Masukkan NIM: "; cin >> baru -> nim;
+ 	cout << "Nilai Matematika : ";cin >> baru->mtk;
+ 	cout << "Nilai B.Indonesia : ";cin >> baru->indo;
+ 	cout << "Nilai SDA : ";cin >>baru->sda;
+ 	cout << "Nilai AKPPL : ";cin >> baru->akppl;
+    baru->jumlah = baru->mtk + baru->indo + baru->sda + baru->akppl;
+    baru->rata = baru->jumlah /4;
+
+    if (isEmpty()){
+        awal = akhir = baru;
+
+    }else{
+        baru -> next = awal; // supaya data berada di posisi awal
+        baru -> prev = baru;
+        awal = baru; // penjabaran untuk data diinput di awal merupakan data baru
+    }
+   bersih();
+}
+
+//input belakang
+void databelakang(){
+    baru = new node;
+    baru->next = NULL;
+    baru->prev = NULL;
+    cout << "===============================\n";
+ 	cout << "        Masukan Data \n";
+ 	cout << "===============================\n";
+    cout << "Input Nama : "; cin  >> baru -> nama;
+    cout << "Masukkan NIM: "; cin >> baru -> nim;
+ 	cout << "Nilai Matematika : ";cin >> baru->mtk;
+ 	cout << "Nilai B.Indonesia : ";cin >> baru->indo;
+ 	cout << "Nilai SDA : ";cin >>baru->sda;
+ 	cout << "Nilai AKPPL : ";cin >> baru->akppl;
+    baru->jumlah = baru->mtk + baru->indo + baru->sda + baru->akppl;
+    baru->rata = baru->jumlah /4;
+
+    if (isEmpty()){
+        awal = akhir = baru;
+    }
+    else {
+        akhir->next = baru; // supaya data berada di posisi akhir
+        baru->prev = akhir;
+        akhir = baru; // penjabaran untuk data yang diinput diakhir merupakan data baru
+    }
+    bersih();
+}
+
+//input after
+void dataafter(){
+    node *prev_node;
+    prev_node = new node;
+    cout << "===============================\n";
+ 	cout << "        Masukan Data \n";
+ 	cout << "===============================\n";
+    cout << "Input Nama : "; cin  >> baru -> nama;
+    cout << "Masukkan NIM: "; cin >> baru -> nim;
+ 	cout << "Nilai Matematika : ";cin >> baru->mtk;
+ 	cout << "Nilai B.Indonesia : ";cin >> baru->indo;
+ 	cout << "Nilai SDA : ";cin >>baru->sda;
+ 	cout << "Nilai AKPPL : ";cin >> baru->akppl;
+    baru->jumlah = baru->mtk + baru->indo + baru->sda + baru->akppl;
+    baru->rata = baru->jumlah /4;
+    
+    if (prev_node = NULL){
+        cout <<" NIlai tidak boleh kosong";
+        return;
+    }
+    node baru=(node)malloc(sizeof(struct node));
+    baru ->next = prev_node->next;
+    prev_node->next = baru;
+
+}
+
+// hapus depan
+void hadepan(){
+    bersih();
+ if(isEmpty()){
+  cout<<"kosong";
+ }
+ else{
+  hapus = awal;
+  awal=awal->next;
+    delete hapus;
+ }
+ cout << endl << endl;
+ view();
+}
+
+//hapus belakang
+void habelakang(){
+    node *hapus;
+
+    if (isEmpty()){
+        awal = NULL;
+        cout <<"Data kosong";
+    }else{
+        hapus = awal;
+         while(hapus->next->next != NULL){
+
+          if(hapus->next->next !=NULL){//Sebelum Akhir
+                hapus = hapus->next;//ini
+            }else{
+                break;
+            }
+        }
+        hapus->next = NULL;
+    }
+    view();
+}
+
+//hapus all
+void haal(){
+    node *bantu,*hapus;
+    bantu = awal;
+    while (bantu!= NULL){
+        hapus = bantu;
+        bantu = bantu -> next;
+        delete hapus;
+    }
+    awal = NULL;
+    view();
+    }
+
+//tampilkan data
+void view(){
+bersih();   
+		bantu=awal;
+		while(bantu!=NULL){
+            cout << "NAMA : " << bantu->nama << endl;
+			cout << "NIM : " << bantu->nim << endl;
+			cout << "Nilai Matematika : " << bantu->mtk << endl;
+			cout << "Nilai B.Indonesia : " << bantu->indo << endl;
+			cout << "Nilai SDA : " << bantu->sda << endl;
+			cout << "Nilai AKPPL : " << bantu->akppl << endl;
+			cout << "Nilai RATA-RATA : " << bantu->rata << endl;
+
+			bantu=bantu->next;
+			cout << "===============================" << endl;
+			}
+		
+	getch();
+}
+
+//laporan txt
+void laporan(){
+    bersih();
+    char text;
+    ofstream filesaya;
+    filesaya.open("raport.txt", ios::app);
+    cout << "Memasukkan data ke dalam file..." << endl;
+    bantu=awal;
+		while(bantu!=NULL){
+            filesaya << "===============================\n";
+	        filesaya << "       REKAPAN RAPORT            " << endl;
+	        filesaya << "===============================\n";
+            filesaya << "NAMA : " << bantu->nama << endl;
+			filesaya << "NIM : " << bantu->nim << endl;
+			filesaya << "Nilai Matematika : " << bantu->mtk << endl;
+			filesaya << "Nilai B.Indonesia : " << bantu->indo << endl;
+			filesaya << "Nilai SDA : " << bantu->sda << endl;
+			filesaya << "Nilai AKPPL : " << bantu->akppl << endl;
+            filesaya << "Nilai rata-rata : " <<baru->rata<<" "<<endl;
+            bantu=bantu->next;
+			}
+    filesaya << endl;
+	filesaya << "=================================\n";
+
+    cout<<"Operasi Membaca File txt"<<endl;
+    cout<<"------------------------"<<endl;
+    ifstream file;                              //tidak boleh sama dengan ofstream
+    file.open("raport.txt");
+    if(!file.fail())
+    {
+        // file ada
+        cout<<"Isi dari file ialah : "<<endl;
+        // perintah eof / end of file
+        while (!file.eof())
+        {
+            file.get(text); //mengambil data dan disimpan pada variabel text
+            cout<<text;  //menampilkan
+        }
+        file.close();
+    }
+    else
+    {
+        cout<<" File tidak ditemukan"<<endl;
+    }
+	filesaya.close();
+}
 
 int main(){
 	do{
@@ -39,83 +251,14 @@ int main(){
 	cout << "| 1. Tambah Data               |" << endl;
 	cout << "| 2. Hapus                     |" << endl;
 	cout << "| 3. Tampil                    |"<< endl;
-	cout << "| 4. Selesai                   |" << endl;
-	cout << "________________________________\n" << endl;
+    cout << "| 4. Laporan                   |" << endl;
+	cout << "| 5. Selesai                   |" << endl;
+	cout << "____________\n" << endl;
 	cout << "Pilihan anda : ";
 	cin>>pil;
 	pilih();
 	} while (pil!=6);
 return 0;
-}
-
-
-void bersih(){
-	system("cls");
-}
-
-void databaru(){ // mungkin add last ya
-	int inputanInteger;
-	string inputanString;
- 	baru=(nilai*)malloc(sizeof(struct nilai));
- 	nilai *current;
- 	baru = new nilai;
- 	baru -> next = NULL;
- 	cout << "===============================\n";
- 	cout << "        Masukan Data \n";
- 	cout << "===============================\n";
- 	// cout << "Input NIS : "; cin >> baru->nis;
- 	cout << "Input Nama : ";
- 	cin >> inputanString;getline(cin, inputanString);// baru->nama;
- 	baru -> nama = inputanString;
- 	cout << "Masukkan NIS : "; cin >> baru -> nis;
- 	cout << "Nilai Matematika : ";cin >> baru->mtk;
- 	cout << "Nilai B.Indonesia : ";cin >> baru->bindo;
- 	cout << "Nilai SDA : ";cin >>baru->sda;
- 	cout << "Nilai AKPPL : ";cin >> baru->akppl;
-
-	if(kosong()){
-		awal = baru;
-		baru -> next = NULL;
-	} else {
-		baru -> next = awal;
-		awal = baru;
-	}
-}
-
-//insert after
-void after(){
-	databaru();
-	if(awal==NULL){
-		awal=baru;
-		akhir=baru;
-		akhir->next=NULL;
-	} else {
-		baru->next=awal;
-		awal=baru;
-	}
-	cout << endl << endl;
-}
-
-// liat data
-void view(){
-	if(awal==NULL){
-		cout << "Kosong";
-	} else {
-		bantu=awal;
-		while(bantu!=NULL){
-			cout << "NIM : " << bantu->nis << endl;
-			cout << "NAMA : " << bantu->nama << endl;
-			cout << "Nilai Matematika : " << bantu->mtk << endl;
-			cout << "Nilai B.Indonesia : " << bantu->bindo << endl;
-			cout << "Nilai SDA : " << bantu->sda << endl;
-			cout << "Nilai AKPPL : " << bantu->akppl << endl;
-			 
-			bantu=bantu->next;
-			cout << "===============================" << endl;
-			}
-		}
-	getch();
-
 }
 
 void pilih(){
@@ -125,26 +268,28 @@ void pilih(){
                 cout << "===============================\n";
                 cout << "|      PILIH MENU INPUTAN     |" << endl;
                 cout << "===============================\n";
-                cout <<" | a. Data baru                |"<< endl;
-                cout <<" | b. Insert After             |"<< endl;
-                cout <<" | c. Insert Last              |"<< endl;
-                cout <<" _______________________________\n"<< endl;
+                cout <<" | a. Input Depan                |"<< endl;
+                cout <<" | b. Insert Last                |"<< endl;
+                cout <<" | c. Insert After               |"<< endl;
+                cout <<" ___________\n"<< endl;
                 cout << "Pilihan anda : ";
                 cin>>tes;
                 
                 switch(tes){
                     case 'a' : 
                         bersih();
-                        databaru();
+                        datadepan();
                         system("PAUSE");
                         break;
                     case 'b' :
                         bersih();
-                        after();
+                        databelakang();
                         system("PAUSE");
                         break;
                     case 'c':
-                        cout<<"masukin";
+                        bersih();
+                        dataafter();
+                        system("PAUSE");
                         break;
                 }
 				system("PAUSE");         
@@ -156,34 +301,42 @@ void pilih(){
                 cout << "===============================\n";
                 cout <<" | a. Delete First              |"<< endl;
                 cout <<" | b. Delete Last               |"<< endl;
-                cout <<" _______________________________\n"<< endl;
+                cout <<" | c. Delete All               |"<< endl;
+                cout <<" ___________\n"<< endl;
                 cout << "Pilihan anda : ";
                 cin>>tes;
                 
                 switch(tes){
                     case 'a' : 
                         bersih();
-                        //haafter();
+                        hadepan();
                         system("PAUSE");
                         break;
                     case 'b' :
                         bersih();
-                        //halast();
+                        habelakang();
+                        system("PAUSE");
+                        break;
+                    case 'c' :
+                        bersih();
+                        haal();
                         system("PAUSE");
                         break;
                 }
 				system("PAUSE");         
                 break;
             case 3:
-            view();
+            if (isEmpty()){
+                    cout << "Data masih kosong !\n";
+            }
+            else {
+                 view();
+            }
+            break;
+            case 4:
+            bersih();
+            laporan();
+            system("PAUSE");
             break;
     }
-}
-
-bool kosong(){
-	if(awal == NULL){
-		return true;
-	} else {
-		return false;
-	}
 }
